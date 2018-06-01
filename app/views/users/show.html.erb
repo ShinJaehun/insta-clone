@@ -1,0 +1,42 @@
+<p id="notice"><%= notice %></p>
+
+<h1><%= @user.name %> Posts</h1>
+<% if can? :follow, @user %>
+    <%= link_to 'Follow', follow_user_path(@user), method: :post %>
+<% end %>
+
+Followees : <%= @user.followees.count %>
+Followers : <%= @user.followers.count %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Image</th>
+      <th>User</th>
+      <th>Content</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @posts.each do |post| %>
+      <tr>
+        <td><%= image_tag post.image.url(:thumb) %></td>
+        <td><%= link_to post.user.name, post.user %></td>
+        <td><%= link_to 'Show', post %></td>
+        
+        <%# if post.user == current_user %>
+        <% if can? :manage, post %>
+          <td><%= link_to 'Edit', edit_post_path(post) %></td>
+          <td><%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<% if can? :update, @user %>
+<%= link_to 'Edit User', edit_user_registration_path %>
+<% end %>

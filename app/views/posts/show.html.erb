@@ -1,0 +1,42 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Image:</strong>
+  <img src="<%= @post.image.url %>">
+  <%#= image_tag @post.image.url %>
+  <%#= @post.image %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @post.user.name %>
+</p>
+
+
+<p>
+  <strong>Content:</strong>
+  <%= @post.content %>
+</p>
+
+<p>
+  <strong>Likes:</strong>
+  <%= @post.like_users.count %>
+</p>
+
+<p>
+  <% if @post.like_users.include?(current_user) %>
+    <%= link_to 'Unlike', like_post_path, method: :post %>
+  <% else %>
+    <%= link_to 'Like', like_post_path, method: :post %>
+  <% end %>
+</p>
+
+<%#= @post.like_users.ids %>
+
+
+<%# if @post.user == current_user %>
+<% if can? :manage, @post %>
+  <%= link_to 'Edit', edit_post_path(@post) %> |
+<% end %>
+
+<%= link_to 'Back', posts_path %>

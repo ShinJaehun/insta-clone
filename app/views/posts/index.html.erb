@@ -1,0 +1,43 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Posts</h1>
+
+<!--posts_path는 index action-->
+<!--주소창에서는 content=2 뭐 이런식으로 넘어감...-->
+<%= form_tag posts_path, method: :get do %>
+  Content:
+  <!--엔터를 치고나서 text_field에 검색했던 값이 남아있도록 하기 위해 params을 넣어둠...-->
+  <%= text_field_tag :content, params[:content] %>
+  <%= submit_tag :search %>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Image</th>
+      <th>User</th>
+      <th>Content</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @posts.each do |post| %>
+      <tr>
+        <td><%= image_tag post.image.url(:thumb) %></td>
+        <td><%= link_to post.user.name, post.user %></td>
+        <td><%= link_to 'Show', post %></td>
+        
+        <%# if post.user == current_user %>
+        <% if can? :manage, post %>
+          <td><%= link_to 'Edit', edit_post_path(post) %></td>
+          <td><%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Post', new_post_path %>
